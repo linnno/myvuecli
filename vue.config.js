@@ -1,4 +1,9 @@
-const Timestamp = new Date().getTime()
+const Timestamp = new Date().getTime();
+const isProduction = process.env.NODE_ENV === 'production';
+const cdn = {
+  css: [],
+  js: ['https://cdn.bootcss.com/vue/2.6.10/vue.runtime.min.js', 'https://cdn.bootcss.com/vue-router/3.0.2/vue-router.min.js','https://cdn.bootcss.com/vuex/3.1.0/vuex.min.js','https://cdn.bootcss.com/axios/0.18.0/axios.min.js']
+};
 module.exports = {
   devServer: {
     // 设置代理
@@ -18,23 +23,41 @@ module.exports = {
     config.optimization.minimize(true);
     config.optimization.splitChunks({
       chunks: 'all'
-    })
+    });
+    if (isProduction) {
+      config.plugin('html')
+      .tap(args => {
+          args[0].cdn = cdn;
+        return args;
+      })
+    };
   },
   css: {
     extract: true
   },
-  publicPath: './',//测试或线上环境请改为对应的路径
+  publicPath: './', //测试或线上环境请改为对应的路径
   outputDir: undefined,
   assetsDir: undefined,
   runtimeCompiler: undefined,
   productionSourceMap: undefined,
   parallel: undefined,
-  // 修改webpack的配置
-  configureWebpack: {
+  configureWebpack:{
     output: { // 输出重构  打包编译后的 文件名称  【模块名称.时间戳】
       filename: `[name].${Timestamp}.js`,
       chunkFilename: `[name].${Timestamp}.js`
     },
-  }
+  },
+  // 修改webpack的配置
+  configureWebpack:config => {
+      if (isProduction) {
+        config.externals = {
+          'vue': 'Vue',
+          'axios': 'axios',
+          'vuex': 'Vuex',
+          'vue-router': 'VueRouter',
+        }
+      }
+    }
+  
 
 };
