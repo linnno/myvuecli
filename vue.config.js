@@ -1,23 +1,26 @@
 const Timestamp = new Date().getTime();
 const isProduction = process.env.NODE_ENV === 'production';
+const port = 5217;
 const cdn = {
   css: [],
   js: ['https://cdn.bootcss.com/vue/2.6.10/vue.runtime.min.js', 'https://cdn.bootcss.com/vue-router/3.0.2/vue-router.min.js','https://cdn.bootcss.com/vuex/3.1.0/vuex.min.js','https://cdn.bootcss.com/axios/0.18.0/axios.min.js']
 };
 module.exports = {
   devServer: {
+    port:port,
     // 设置代理
     proxy: {
       '/api': {
         // target: "", //设置你调用的接口域名和端口号 别忘了加http  
-        target: "http://40.00.100.133:3002/",
+        target: `http://localhost:${port}/mock`,
         changeOrigin: true,
         pathRewrite: {
           '^/api': '' //这里理解成用‘/api'代替target里面的地址，后面组件中我们掉接口时直接用api代替
           //比如我要调用'http://40.00.100.133:3002/user/login'，直接写‘/api/user/login'即可
         }
       },
-    }
+    },
+    after:require('./mock/mock-server.js')
   },
   chainWebpack: config => { //分割代码,相应的文件中存入分割后的代码
     config.optimization.minimize(true);

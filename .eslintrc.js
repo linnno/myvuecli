@@ -195,7 +195,7 @@ module.exports = {
     "space-before-function-paren": [0, "always"], //函数定义时括号前面要不要有空格
     "space-in-parens": [0, "never"], //小括号里面要不要有空格
     "space-infix-ops": 0, //中缀操作符周围要不要有空格
-    "space-return-throw-case": 2, //return throw case后面要不要加空格
+    "space-return-throw-case": 0, //return throw case后面要不要加空格
     "space-unary-ops": [0, {
       "words": true,
       "nonwords": false
@@ -209,12 +209,5 @@ module.exports = {
     "wrap-iife": [2, "inside"], //立即执行函数表达式的小括号风格
     "wrap-regex": 0, //正则表达式字面量用小括号包起来
     "yoda": [2, "never"] //禁止尤达条件
-  },
-  globals: {
-    '$': false,
-    'jquery': false,
-    'ActiveXObject': false,
-    'arbor': true,
-    'layer': false
   }
 };
